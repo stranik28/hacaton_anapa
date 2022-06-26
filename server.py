@@ -40,12 +40,19 @@ def listok():
 def gen_qr():
     now = int(datetime.timestamp(datetime.now())//10)%100000000
     message = str(now)
-    st = "aabc"
+    st = ""
+    arr = ["c","k","p","o","y","q","j","x","s","l"]
     for i in message:
-        st+=i+"ca"
+        buf = int(i)
+        st+=arr[buf]
     img = qrcode.make(st)
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    img.save((os.path.join(THIS_FOLDER,"some_file.png")))
+    img.save(os.path.join(THIS_FOLDER,"some_file.png"))
+    cursor = mysql.connection.cursor()
+    cursor.execute('''INSERT INTO qr VALUES (%s,%s)''',(0,st))
+    mysql.connection.commit();
+    cursor.close()
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     with open((os.path.join(THIS_FOLDER,"some_file.png")), "rb") as image_file:
         data = str(base64.b64encode(image_file.read()))
     data = data[2:len(data)-1]
@@ -54,14 +61,29 @@ def gen_qr():
 @app.route("/verify_qr", methods=["GET"])
 def verify_qr():
     a = request.args["qr"]
-    a = a[2:len(a)-1]
-    a = a.replace("a","")
-    a = a.replace("b","")
-    a = a.replace("c","")
+    cursor = mysql.connection.cursor()
+    qr = a
     print(a)
+    cursor.execute('''SELECT id FROM qr WHERE qr = %s''',[a])
+    id = cursor.fetchall()
+    cursor.close()
+    arr = ["c","k","p","o","y","q","j","x","s","l"]
+    a = ""
+    for i in qr:
+        num = 0
+        for j in arr:
+            if j == i:
+                a+=str(num)
+            num+=1
     now = int(datetime.timestamp(datetime.now())//10)%100000000
-
-    if now - int(a) < 43200.0:
+    print(id)
+    print(now - int(a))
+    if (now - int(a) < 43200) & (len(id) > 0):
+        cursor = mysql.connection.cursor()
+        cursor.execute('''DELETE FROM qr WHERE qr = %s''',[qr])
+        mysql.connection.commit();
+        cursor.close()
+        print("Ok")
         return {"status":"OK"}
     else:
         return {"status":"Not Ok"}
