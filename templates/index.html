@@ -1,0 +1,31 @@
+<html>
+    <h1>Documentation to Flask API</h1>
+    <h2>Get users by type (/get_users)</h2>
+    To get users by type use param type (0-сотрудник,1 - админ,2-родитель, 3- ребенок) <br>
+    <b>example: http://hakatonkrasnodar.pythonanywhere.com/get_users?type=1 </b> <br>
+    <h2>Search user by fio (/search_user)</h2>
+    To fined user u have to send in param part, part of his fio <br/>
+    <b>example: http://hakatonkrasnodar.pythonanywhere.com/search_user?part=Га</b> <br>
+    <br>
+    <h2> Add user (/add_user)</h2>
+    To add user u have to indicate his type, same as in point 1 in param type <br>
+    If user type is 0 or 1 u should send fio, photo,inst(Number of his institution), phone. <br>
+    If user type is 2 u should send fio, photo,inst(Number of his institution), phone, kid (can send many throw space).<br>
+    If user type is 3 u should send fio,groupa,photo,inst(Number of his institution),phone <br>
+    <br>
+    <b>example : http://hakatonkrasnodar.pythonanywhere.com/add_user?type=3&fio=Гадя Петрович Хренова&group=12&photo=img/1.png&inst=0&phone=808005553535 </b>
+    <br>
+    <h2> Add parents by parents (/send_to_verification_users)</h2>
+    To add parents by parent u should send fio, photo,inst(Number of his institution), phone, kid (can send many throw space).<br>
+    <b>example: http://hakatonkrasnodar.pythonanywhere.com/send_to_verification_users?type=3&fio=Галина Петровна Корнеплодова&photo=img/3.png&kid=15&phone=8800553535&inst=0</b> <br>
+    <br>
+    <h2> Get users waiting verification (/verificate_user)</h2>
+    <b>example: http://hakatonkrasnodar.pythonanywhere.com/verificate_user</b>
+    <br>
+    <h2>To verificate user (POST) (/verificate_user)</h2>
+    To verificate user use params id,ver(1 to confirm, 2 to reject) <br>
+    <b>example: http://hakatonkrasnodar.pythonanywhere.com/verificate_user?id=1&ver=1</b>
+    <br>
+    <br>
+    Happy coding :)
+</html>
