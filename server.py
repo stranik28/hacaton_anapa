@@ -108,6 +108,7 @@ def users():
             answer[j] = sub_answer
             j+=1
     elif typ == 2:
+        print("type 2")
         cursor = mysql.connection.cursor()
         cursor.execute(''' SELECT id,fio,photo,phone,kid FROM users WHERE type = %s ; ''', str(typ))
         arr = cursor.fetchall()
@@ -122,17 +123,17 @@ def users():
                 for f in i[4].split(" "):
                     cursor = mysql.connection.cursor()
                     cursor.execute(''' SELECT fio FROM users WHERE id = %s;''',[str(f)])
-                    arr = cursor.fetchall()
+                    arm = cursor.fetchall()
                     cursor.close()
                     # if len(kids) > 0:
-                    kids += arr[0][0] + ' , '
-        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-        with open((os.path.join(THIS_FOLDER,i[2])), "rb") as image_file:
-            data = str(base64.b64encode(image_file.read()))
-            data = data[2:len(data)-1]
-        sub_answer = {"id":i[0],"fio":i[1],"photo":data,"phone":i[3], "kids":kids}
-        answer[j] = sub_answer
-        j+=1
+                    kids += arm[0][0] + ' , '
+            THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+            with open((os.path.join(THIS_FOLDER,i[2])), "rb") as image_file:
+                data = str(base64.b64encode(image_file.read()))
+                data = data[2:len(data)-1]
+            sub_answer = {"id":i[0],"fio":i[1],"photo":data,"phone":i[3], "kids":kids}
+            answer[j] = sub_answer
+            j+=1
     else:
         cursor = mysql.connection.cursor()
         cursor.execute(''' SELECT id,fio,photo,phone,groupa FROM users WHERE type = %s ; ''', str(typ))
